@@ -6,29 +6,32 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import os
 from selenium.webdriver.support import expected_conditions as EC
-load_dotenv()
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import ElementNotVisibleException
 from selenium.common.exceptions import ElementNotSelectableException
 
-if __name__ == "__main__":
+def init_brower():
     global browser
     s=Service(ChromeDriverManager().install())
-    # browser = webdriver.Chrome("chromedriver.exe")
     browser = webdriver.Chrome(service=s)
     browser.get(os.getenv('PANDASCORE_URL'))
-    ubox = browser.find_element_by_name("email")
-    pbox = browser.find_element_by_name("password")
-    
+    return browser
+
+def login(browser):
+    ubox = browser.find_element(By.NAME, "email")
+    pbox = browser.find_element(By.NAME, "password")
     ubox.send_keys(os.getenv('PANDASCORE_EMAIL'))
     pbox.send_keys(os.getenv('PANDASCORE_PASSWORD'))
-
-    login_button = browser.find_element_by_tag_name("input")
+    login_button = browser.find_element(By.TAG_NAME, "input")
     login_button.submit()
+    
+def go_to_account(browser):
     wait = WebDriverWait(browser, 10, poll_frequency=1, ignored_exceptions=[ElementNotVisibleException, ElementNotSelectableException])
     wait.until(EC.element_to_be_clickable((By.XPATH, "//a[contains(text(),'Account')]")))
     account_button = browser.find_element(By.XPATH, "//a[contains(text(),'Account')]")
     account_button.click()
+
+def change_name_from_account(browser):
     WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, "//html[@id='html']/body/div/div/div[2]/div/div/div/form/div/input"))).click()
     namebox = browser.find_element(By.XPATH, "//html[@id='html']/body/div/div/div[2]/div/div/div/form/div/input")
     namebox.clear()
@@ -38,5 +41,15 @@ if __name__ == "__main__":
     sendform = browser.find_element(By.XPATH, "//html[@id='html']/body/div/div/div[2]/div/div/div/form/div[8]/button")
     sendform.click()
 
+def infinit_loop():
+    
     while True:
        c = 1
+
+if __name__ == "__main__":
+    load_dotenv()
+    browser = init_brower()
+    login(browser)
+    go_to_account(browser)
+    change_name_from_account(browser)
+    infinit_loop()
