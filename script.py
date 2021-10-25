@@ -9,11 +9,17 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import ElementNotVisibleException
 from selenium.common.exceptions import ElementNotSelectableException
+from selenium.webdriver.chrome.options import Options
 
 def init_brower():
     global browser
     s=Service(ChromeDriverManager().install())
-    browser = webdriver.Chrome(service=s)
+    # browser = webdriver.Chrome("chromedriver.exe")
+    chrome_options = Options()
+    chrome_options.add_argument('--headless')
+    # chrome_options.add_argument('--no-sandbox')
+    # chrome_options.add_argument('--disable-dev-shm-usage')
+    browser = webdriver.Chrome(service=s, options=chrome_options)
     browser.get(os.getenv('PANDASCORE_URL'))
     return browser
 
@@ -42,7 +48,6 @@ def change_name_from_account(browser):
     sendform.click()
 
 def infinit_loop():
-    
     while True:
        c = 1
 
