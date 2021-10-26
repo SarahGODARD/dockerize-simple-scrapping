@@ -1,4 +1,4 @@
-import selenium 
+import selenium
 from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -37,11 +37,16 @@ def go_to_account(browser):
     account_button = browser.find_element(By.XPATH, "//a[contains(text(),'Account')]")
     account_button.click()
 
+def get_new_name():
+    print("Type your new name :")
+    return input()
+
 def change_name_from_account(browser):
     WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, "//html[@id='html']/body/div/div/div[2]/div/div/div/form/div/input"))).click()
     namebox = browser.find_element(By.XPATH, "//html[@id='html']/body/div/div/div[2]/div/div/div/form/div/input")
+    print("Your name is :", namebox.get_attribute("value"))
     namebox.clear()
-    namebox.send_keys(os.getenv('PANDASCORE_NEWNAME'))
+    namebox.send_keys(get_new_name())
     retype_password = browser.find_element(By.XPATH, "//html[@id='html']/body/div/div/div[2]/div/div/div/form/div[7]/input")
     retype_password.send_keys(os.getenv('PANDASCORE_PASSWORD'))
     sendform = browser.find_element(By.XPATH, "//html[@id='html']/body/div/div/div[2]/div/div/div/form/div[8]/button")
@@ -57,4 +62,3 @@ if __name__ == "__main__":
     login(browser)
     go_to_account(browser)
     change_name_from_account(browser)
-    infinit_loop()
