@@ -9,6 +9,8 @@ Make sure you entered the right informations for email and password in .env file
 
 ## Run on your own environement. 
 
+You need a stable version of Chrome.
+
 ```bash
 pip install -r requirement.txt
 ```
@@ -36,6 +38,14 @@ python script.py
 ```
 
 You can also use the docker desktop app.
+
+```bash
+python script_test.py
+```
+
+# Run tests
+
+On your environement or on Docker :
 
 # Developer
 
