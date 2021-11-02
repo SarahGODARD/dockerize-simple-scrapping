@@ -66,6 +66,31 @@ def get_new_name():
     print("Type your new name :")
     return input()
 
+def get_previous_name(namebox):
+    """[summary]
+
+    Args:
+        namebox ([WebElement]): [name box from Account page]
+
+    Returns:
+        [string]: [Value of the name box.]
+    """
+    previous_name = namebox.get_attribute("value")
+    print("Your name is :", previous_name)
+    return previous_name
+
+def get_namebox(browser):
+    """[summary]
+
+    Args:
+        browser ([type]): [for Chrome, path must be pandascore Account page]
+
+    Returns:
+        [WebElement]: [name box element in Account page.]
+    """
+    namebox = browser.find_element(By.XPATH, "//html[@id='html']/body/div/div/div[2]/div/div/div/form/div/input")
+    return namebox
+
 def change_name_from_account(browser):
     """[summary]
         Change your user name from an input after printing your previous one.
@@ -73,8 +98,8 @@ def change_name_from_account(browser):
         browser ([WebDriver]): [for Chrome, path mush be Account pandascore page. User must be logged in.]
     """
     WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, "//html[@id='html']/body/div/div/div[2]/div/div/div/form/div/input"))).click()
-    namebox = browser.find_element(By.XPATH, "//html[@id='html']/body/div/div/div[2]/div/div/div/form/div/input")
-    print("Your name is :", namebox.get_attribute("value"))
+    namebox = get_namebox(browser)
+    get_previous_name(namebox)
     namebox.clear()
     namebox.send_keys(get_new_name())
     retype_password = browser.find_element(By.XPATH, "//html[@id='html']/body/div/div/div[2]/div/div/div/form/div[7]/input")
