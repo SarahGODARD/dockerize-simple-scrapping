@@ -12,6 +12,11 @@ from selenium.common.exceptions import ElementNotSelectableException
 from selenium.webdriver.chrome.options import Options
 
 def init_brower():
+    """[summary]
+        Initialise the selinium browser with the right URL.
+    Returns:
+        [WebDriver]: [for Chrome, paht is pandascore loging page]
+    """
     global browser
     s=Service(ChromeDriverManager().install())
     # browser = webdriver.Chrome("chromedriver.exe")
@@ -24,6 +29,11 @@ def init_brower():
     return browser
 
 def login(browser):
+    """[summary]
+        Log in the user. Using email and password from .env.
+    Args:
+        browser ([WebDriver]): [for Chrome, path must be pandascore loging page]
+    """
     ubox = browser.find_element(By.NAME, "email")
     pbox = browser.find_element(By.NAME, "password")
     ubox.send_keys(os.getenv('PANDASCORE_EMAIL'))
@@ -32,16 +42,36 @@ def login(browser):
     login_button.submit()
     
 def go_to_account(browser):
-    wait = WebDriverWait(browser, 10, poll_frequency=1, ignored_exceptions=[ElementNotVisibleException, ElementNotSelectableException])
-    wait.until(EC.element_to_be_clickable((By.XPATH, "//a[contains(text(),'Account')]")))
+    """[summary]
+        Change path to the account page.
+    Args:
+        browser ([WebDriver]): [for Chrome, path must be pandascore loging page]
+    """
+    try:
+
+        wait = WebDriverWait(browser, 10, poll_frequency=1, ignored_exceptions=[ElementNotVisibleException, ElementNotSelectableException])
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//a[contains(text(),'Account')]")))
+    except:
+        print("Please, check your log information.")
+        exit()
     account_button = browser.find_element(By.XPATH, "//a[contains(text(),'Account')]")
     account_button.click()
 
 def get_new_name():
+    """[summary]
+        Getting a new name from input.
+    Returns:
+        [not defined]: [new name of the user.]
+    """
     print("Type your new name :")
     return input()
 
 def change_name_from_account(browser):
+    """[summary]
+        Change your user name from an input after printing your previous one.
+    Args:
+        browser ([WebDriver]): [for Chrome, path mush be Account pandascore page. User must be logged in.]
+    """
     WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, "//html[@id='html']/body/div/div/div[2]/div/div/div/form/div/input"))).click()
     namebox = browser.find_element(By.XPATH, "//html[@id='html']/body/div/div/div[2]/div/div/div/form/div/input")
     print("Your name is :", namebox.get_attribute("value"))
@@ -52,12 +82,20 @@ def change_name_from_account(browser):
     sendform = browser.find_element(By.XPATH, "//html[@id='html']/body/div/div/div[2]/div/div/div/form/div[8]/button")
     sendform.click()
 
-def infinit_loop():
-    while True:
-       c = 1
+def handling_error():
+    """[summary]
+        Check if .env variables are not empty.
+    """
+    print(os.getenv('PANDASCORE_EMAIL'))
+    print(os.getenv('PANDASCORE_PASSWORD'))
+    print(os.getenv('PANDASCORE_URL'))
+    if os.getenv('PANDASCORE_PASSWORD') == "" or os.getenv('PANDASCORE_EMAIL') == "" or os.getenv('PANDASCORE_URL') == "":
+        print("Please, check your .env variables.")
+        exit()
 
 if __name__ == "__main__":
     load_dotenv()
+    handling_error()
     browser = init_brower()
     login(browser)
     go_to_account(browser)
