@@ -5,6 +5,7 @@ This is the technical test for Pandascore application.
 ## requirements
 
 You will need python3 lastest version to run this app. 
+Make sure you entered the right informations for email and password in .env file. Do not modify PANDASCORE_URL.
 
 ## Run on your own environement. 
 
