@@ -39,13 +39,13 @@ python script.py
 
 You can also use the docker desktop app.
 
-```bash
-python script_test.py
-```
-
 # Run tests
 
 On your environement or on Docker :
+
+```bash
+python script_test.py
+```
 
 # Developer
 
