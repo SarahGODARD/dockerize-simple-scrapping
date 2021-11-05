@@ -40,6 +40,7 @@ def login(browser):
     pbox.send_keys(os.getenv('PANDASCORE_PASSWORD'))
     login_button = browser.find_element(By.TAG_NAME, "input")
     login_button.submit()
+    return 0
     
 def go_to_account(browser):
     """[summary]
@@ -56,6 +57,7 @@ def go_to_account(browser):
         exit()
     account_button = browser.find_element(By.XPATH, "//a[contains(text(),'Account')]")
     account_button.click()
+    return 0
 
 def get_new_name():
     """[summary]
@@ -66,7 +68,7 @@ def get_new_name():
     print("Type your new name :")
     return input()
 
-def get_previous_name(namebox):
+def get_current_name(namebox):
     """[summary]
 
     Args:
@@ -75,9 +77,9 @@ def get_previous_name(namebox):
     Returns:
         [string]: [Value of the name box.]
     """
-    previous_name = namebox.get_attribute("value")
-    print("Your name is :", previous_name)
-    return previous_name
+    current_name = namebox.get_attribute("value")
+    print("Your name is :", current_name)
+    return current_name
 
 def get_namebox(browser):
     """[summary]
@@ -99,13 +101,15 @@ def change_name_from_account(browser):
     """
     WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.XPATH, "//html[@id='html']/body/div/div/div[2]/div/div/div/form/div/input"))).click()
     namebox = get_namebox(browser)
-    get_previous_name(namebox)
+    previous_name = get_current_name(namebox)
     namebox.clear()
-    namebox.send_keys(get_new_name())
+    new_name = get_new_name()
+    namebox.send_keys(new_name)
     retype_password = browser.find_element(By.XPATH, "//html[@id='html']/body/div/div/div[2]/div/div/div/form/div[7]/input")
     retype_password.send_keys(os.getenv('PANDASCORE_PASSWORD'))
     sendform = browser.find_element(By.XPATH, "//html[@id='html']/body/div/div/div[2]/div/div/div/form/div[8]/button")
     sendform.click()
+    return [previous_name, new_name]
 
 def handling_error():
     """[summary]
@@ -117,11 +121,13 @@ def handling_error():
     if os.getenv('PANDASCORE_PASSWORD') == "" or os.getenv('PANDASCORE_EMAIL') == "" or os.getenv('PANDASCORE_URL') == "":
         print("Please, check your .env variables.")
         exit()
+    return 0
 
 if __name__ == "__main__":
     load_dotenv()
     handling_error()
     browser = init_brower()
+    print(browser)
     login(browser)
     go_to_account(browser)
     change_name_from_account(browser)
