@@ -1,6 +1,6 @@
 # A simple scrapping
 
-This is the technical test for Pandascore application.
+This is a simple scrapping script on Pandascore application.
 
 ## requirements
 
